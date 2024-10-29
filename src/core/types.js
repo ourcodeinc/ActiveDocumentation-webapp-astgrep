@@ -5,6 +5,9 @@ const ruleStructure = {
     title: "string",
     description: "string",
     tags: "array",
+    rule: "plain object",
+    filesAndFolders: "array",
+    results: "array",
 };
 
 /**
