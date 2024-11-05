@@ -3,6 +3,7 @@ import {Component} from "react";
 import {connect} from "react-redux";
 import WebSocketManager from "./webSocket/webSocketManager";
 import {CONFIG} from "./config";
+import AllRules from "./ui/allRules";
 import NavBar from "./ui/navBar";
 import HeaderBar from "./ui/headerBar";
 import TableOfContents from "./ui/tableOfContents";
@@ -101,11 +102,15 @@ class App extends Component {
         switch (this.state.hash) {
             case HASH_CONSTANTS.INDEX:
                 return (
-                    <div id={"tableOfContent"} data-testid="tableOfContent"
-                        className={(this.state.hash === HASH_CONSTANTS.INDEX) ? "text-align-left" : "text-align-left hidden"}>
+                    <div id={"tableOfContent"} data-testid="tableOfContent" className={"text-align-left"}>
                         <TableOfContents/>
                     </div>
                 );
+            case HASH_CONSTANTS.ALL_RULES:
+                return (
+                    <div id={"allRules"} data-testid="allRules">
+                        <AllRules/>
+                    </div>);
             default:
                 return null;
         }

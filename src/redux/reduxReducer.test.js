@@ -23,35 +23,35 @@ describe("Redux Reducer", () => {
     });
 
     describe("Handling ACTION_UPDATE_LOADING_GIF", () => {
-        it("should update loadingGif when ACTION_UPDATE_LOADING_GIF is dispatched", () => {
+        it("should update loadingGifStatus when ACTION_UPDATE_LOADING_GIF is dispatched", () => {
             const action = {
                 type: REDUX_STORE_ACTIONS.ACTION_UPDATE_LOADING_GIF,
                 data: {
-                    loadingGif: true,
-                    loadingMessage: "New Loading Message",
+                    loadingGifStatus: true,
+                    loadingGifMessage: "New Loading Message",
                 },
             };
             const expectedState = {
                 ...initialState,
-                loadingGif: true,
-                loadingMessage: "New Loading Message",
+                loadingGifStatus: true,
+                loadingGifMessage: "New Loading Message",
                 message: REDUX_STORE_MESSAGES.LOADING_GIF_STATUS_MSG,
             };
             expect(reducer(initialState, action)).toEqual(expectedState);
         });
 
-        it("should update loadingMessage when ACTION_UPDATE_LOADING_GIF is dispatched with loadingMessage", () => {
+        it("should update loadingGifMessage when ACTION_UPDATE_LOADING_GIF is dispatched with loadingGifMessage", () => {
             const action = {
                 type: REDUX_STORE_ACTIONS.ACTION_UPDATE_LOADING_GIF,
                 data: {
-                    loadingGif: true,
-                    loadingMessage: "New Loading Message",
+                    loadingGifStatus: true,
+                    loadingGifMessage: "New Loading Message",
                 },
             };
             const expectedState = {
                 ...initialState,
-                loadingGif: true,
-                loadingMessage: "New Loading Message",
+                loadingGifStatus: true,
+                loadingGifMessage: "New Loading Message",
                 message: REDUX_STORE_MESSAGES.LOADING_GIF_STATUS_MSG,
             };
             expect(reducer(initialState, action)).toEqual(expectedState);
@@ -61,14 +61,38 @@ describe("Redux Reducer", () => {
             const action = {
                 type: REDUX_STORE_ACTIONS.ACTION_UPDATE_LOADING_GIF,
                 data: {
-                    loadingGif: true,
-                    loadingMessage: "New Loading Message",
+                    loadingGifStatus: true,
+                    loadingGifMessage: "New Loading Message",
                 },
             };
             const newState = reducer(initialState, action);
 
             expect(newState).not.toBe(initialState);
             expect(initialState).toEqual(REDUX_INITIAL_STATE);
+        });
+    });
+
+    describe("Handling ACTION_UPDATE_RULE_TABLE", () => {
+        it("should handle ACTION_UPDATE_RULE_TABLE", () => {
+            const initialState = {...REDUX_INITIAL_STATE};
+            const ruleTableData = ["Rule 1", "Rule 2"];
+
+            const action = {
+                type: REDUX_STORE_ACTIONS.ACTION_UPDATE_RULE_TABLE,
+                data: {
+                    ruleTable: ruleTableData,
+                },
+            };
+
+            const expectedState = {
+                ...initialState,
+                message: REDUX_STORE_MESSAGES.UPDATE_RULE_TABLE_MSG,
+                ruleTable: ruleTableData,
+            };
+
+            const newState = reducer(initialState, action);
+
+            expect(newState).toEqual(expectedState);
         });
     });
 });

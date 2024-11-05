@@ -1,8 +1,8 @@
 import {parseJson, createDefaultObjectFromStructure, isValidInput} from "./utilities";
 import {WEBSOCKET_RECEIVED_MESSAGE, WEBSOCKET_MESSAGE_STRUCTURE} from "../webSocket/webSocketConstants";
-import {updateLoadingGif} from "../redux/reduxActions";
-import {LOADING_GIF_MESSAGES} from "../ui/uiConstants";
+import {updateRuleTable} from "../redux/reduxActions";
 import {validRules} from "./types";
+import {REDUX_STORE_MESSAGES} from "../redux/reduxConstants";
 
 /**
  * @param {string} receivedMessage
@@ -17,8 +17,18 @@ export const processReceivedMessage = (receivedMessage, dispatch) => {
             break;
 
         case WEBSOCKET_RECEIVED_MESSAGE.RULE_TABLE_MSG:
-            console.log("processMessages.processReceivedMessage:", "Valid rules", validRules(parsedMessage.data));
-            dispatch(updateLoadingGif(true, LOADING_GIF_MESSAGES.LOADING_RULES));
+            const validRuleTable = validRules(parsedMessage.data);
+            dispatch(updateRuleTable(validRuleTable, REDUX_STORE_MESSAGES.INITIAL_RULE_TABLE_MSG));
+            break;
+
+        case WEBSOCKET_RECEIVED_MESSAGE.UPDATED_RULE_TABLE_MSG:
+            const validUpdatedRuleTable = validRules(parsedMessage.data);
+            dispatch(updateRuleTable(validUpdatedRuleTable, REDUX_STORE_MESSAGES.UPDATED_RULE_TABLE_MSG));
+            break;
+
+        case WEBSOCKET_RECEIVED_MESSAGE.UPDATED_CODE_MSG:
+            const validUpdatedCodeRuleTable = validRules(parsedMessage.data);
+            dispatch(updateRuleTable(validUpdatedCodeRuleTable, REDUX_STORE_MESSAGES.UPDATED_CODE_RULE_TABLE_MSG));
             break;
 
         case "":

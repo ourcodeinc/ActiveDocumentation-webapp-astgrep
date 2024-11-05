@@ -1,6 +1,6 @@
 export const REDUX_INITIAL_STATE = {
-    loadingGif: false,
-    loadingMessage: "",
+    loadingGifStatus: false,
+    loadingGifMessage: "",
 
     ruleTable: [],
     tagTable: [],

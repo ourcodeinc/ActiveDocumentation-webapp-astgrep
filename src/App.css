@@ -10,6 +10,10 @@
   text-align: left;
 }
 
+.link {
+  cursor: pointer;
+}
+
 /* loading spinner */
 
 .spinner {
@@ -134,4 +138,88 @@
 .infoIcon {
   margin-left: 10px;
   position: relative;
+}
+
+/*!*** ruleTable and rulePanel*!*/
+
+.rulePanelDiv {
+  background-color: #f3f3f3;
+  border: 1px solid #d6d6d6;
+  border-radius: 7px;
+  padding: 5px;
+}
+
+.rulePanelDiv .caret {
+  cursor: pointer;
+}
+
+.rulePanelDiv .caret.active {
+  color: black;
+}
+
+.rulePanelDiv .caret {
+  color: darkgray;
+}
+
+.rulePanelSatisfiedTab {
+  color: forestgreen !important;
+}
+
+.rulePanelViolatedTab {
+  color: darkred !important;
+}
+
+.rulePanelDiv .buttonDiv {
+  float: left;
+  padding-right: 2px;
+}
+
+/* SnippetView */
+
+.snippetDiv pre {
+  background-color: white !important;
+  margin: 5px 0 0 !important;
+  padding: 3px !important;
+  text-align: left;
+  font-size: x-small;
+}
+
+.snippetDiv .filePath {
+  color: darkgray;
+  text-align: right;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: min(33%, 300px);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  background-color: rgba(240, 240, 240, 0.8);
+  transition: color 0.3s ease;
+  direction: rtl;
+  text-align: left;
+  cursor: default;
+}
+
+.snippetDiv .filePath:hover {
+  color: black;
+}
+
+.snippetDiv .fullPath {
+  display: none;
+  position: absolute;
+  top: 20px;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px;
+  font-size: 12px;
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+.snippetDiv .filePath:hover + .fullPath {
+  display: block;
 }

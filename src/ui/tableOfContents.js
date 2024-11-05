@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import "../App.css";
 import {connect} from "react-redux";
-import {Button} from "react-bootstrap";
+import {Button, Stack} from "react-bootstrap";
 import {MdPlaylistAdd} from "react-icons/md";
 import {HASH_CONSTANTS} from "./uiConstants";
 import {CONFIG} from "../config";
@@ -31,7 +31,7 @@ class TableOfContents extends Component {
 
     render() {
         return (
-            <div>
+            <div data-testid={"tableOfContents"}>
                 {this.renderTags()}
                 {this.renderRules()}
                 {this.renderWelcomeMessage()}
@@ -63,19 +63,17 @@ class TableOfContents extends Component {
 
         return (
             <>
-                <div className="well well-sm" data-testid="rules-header">
-                    <h4>Rules</h4>
+                <div className="border p-3 bg-light rounded" data-testid="rules-header">
+                    <h4>{"All Documented Rules"}</h4>
                 </div>
-                <div className="list-inline">
-                    <table>
-                        <tbody>
-                            {this.state.ruleTable.map((rule, i) => (
-                                <tr key={i}>
-                                    <td className="list-group-item">{rule.title}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                <div className="table-responsive">
+                    <Stack className="pt-2">
+                        {this.state.ruleTable.map((rule, i) => (
+                            <div key={i}>
+                                <div className="border p-3 rounded">{rule.title}</div>
+                            </div>
+                        ))}
+                    </Stack>
                 </div>
             </>
         );

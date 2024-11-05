@@ -5,7 +5,8 @@ const ruleStructure = {
     title: "string",
     description: "string",
     tags: "array",
-    rulePattern: "plain object", // an object with a `rule` property
+    rulePatternQuantifier: "plain object", // an object with a `rule` property
+    rulePatternConstraint: "plain object", // an object with a `rule` property
     language: "string",
     filesAndFolders: "array",
     results: "array",
@@ -45,5 +46,21 @@ export const validRules = (input) => {
     if (!isTypedCorrectly(input, "array")) {
         return [];
     }
-    return input.filter((rule) => isValidRuleType(rule));
+    return input.filter((rule) => {
+        const isValid = isValidRuleType(rule);
+        if (!isValid) {
+            console.log("types.validRules:", "Invalid Rule:", rule);
+        }
+        return isValid;
+    });
 };
+
+/**
+ * @typedef {snippet: string, lines: { start: number, end: number },
+ *           columns: { start: number, end: number }, offsets: { start: number, end: number }} Snippet
+ * @typedef {relativePath: string,
+ *           snippets: {satisfiedSnippets: Snippet[], violatedSnippets: Snippet[]}} ResultObject
+ * @typedef {index: string, title: string, description: string, tags: string[],
+ *           rulePatternQuantifier: {rule: object}, rulePatternQuantifier: {rule: object},
+ *           language: string, fileAndFolders: string[], results: ResultObject[][]} Rule
+ */

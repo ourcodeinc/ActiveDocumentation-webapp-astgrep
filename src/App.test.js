@@ -140,7 +140,7 @@ describe("App Component", () => {
                 </Provider>,
             );
 
-            expect(screen.queryByTestId("tableOfContent")).toBeNull();
+            expect(screen.queryByTestId("tableOfContents")).toBeNull();
         });
 
         it("renders TableOfContents when hash is set to INDEX", () => {
@@ -152,7 +152,7 @@ describe("App Component", () => {
                 </Provider>,
             );
 
-            const tableOfContents = screen.getByTestId("tableOfContent");
+            const tableOfContents = screen.getByTestId("tableOfContents");
             expect(tableOfContents).toBeInTheDocument();
         });
     });
