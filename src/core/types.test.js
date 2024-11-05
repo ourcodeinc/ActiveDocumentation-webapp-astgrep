@@ -1,4 +1,5 @@
 import {isValidRuleType, isValidRuleTable, validRules} from "./types";
+import {mockRuleOne, mockRuleTwo, mockRuleThree, mockRuleFour} from "../__mocks__/mockRules";
 
 describe("PropTypes Validation", () => {
     beforeEach(() => {
@@ -8,49 +9,21 @@ describe("PropTypes Validation", () => {
 
     describe("isValidRuleType", () => {
         it("should return true for a valid rule object", () => {
-            const validRule = {
-                index: "1",
-                title: "Valid Rule",
-                description: "This is a valid rule.",
-                tags: ["tag1", "tag2"],
-                rulePatternQuantifier: {},
-                rulePatternConstraint: {},
-                language: "",
-                filesAndFolders: ["file.txt", "folder1"],
-                results: [],
-            };
+            const validRule = {...mockRuleOne};
 
             expect(isValidRuleType(validRule)).toBe(true);
         });
 
         it("should return false for an invalid rule object (missing required title)", () => {
-            const invalidRule = {
-                index: "1",
-                // Title is missing
-                description: "This is an invalid rule.",
-                tags: ["tag1"],
-                rulePatternQuantifier: {},
-                rulePatternConstraint: {},
-                language: "",
-                filesAndFolders: ["file.txt", "folder1"],
-                results: [],
-            };
+            const invalidRule = {...mockRuleOne};
+            delete invalidRule.title; // Title is missing
 
             expect(isValidRuleType(invalidRule)).toBe(false);
         });
 
         it("should return false for an invalid rule object (wrong type for index)", () => {
-            const invalidRule = {
-                index: 1, // Should be a string
-                title: "Valid Rule",
-                description: "This rule has the wrong type for index.",
-                tags: ["tag1"],
-                rulePatternQuantifier: {},
-                rulePatternConstraint: {},
-                language: "",
-                filesAndFolders: ["file.txt", "folder1"],
-                results: [],
-            };
+            const invalidRule = {...mockRuleOne};
+            invalidRule.index = 1; // Should be a string
 
             expect(isValidRuleType(invalidRule)).toBe(false);
         });
@@ -58,30 +31,7 @@ describe("PropTypes Validation", () => {
 
     describe("isValidRuleTable", () => {
         it("should return true for a valid array of rule objects", () => {
-            const validRuleTable = [
-                {
-                    index: "1",
-                    title: "Rule 1",
-                    description: "Description for rule 1",
-                    tags: ["tag1", "tag2"],
-                    rulePatternQuantifier: {},
-                    rulePatternConstraint: {},
-                    language: "",
-                    filesAndFolders: ["file.txt", "folder1"],
-                    results: [],
-                },
-                {
-                    index: "2",
-                    title: "Rule 2",
-                    description: "Description for rule 2",
-                    tags: ["tag3"],
-                    rulePatternQuantifier: {},
-                    rulePatternConstraint: {},
-                    language: "",
-                    filesAndFolders: ["file2.txt", "file3.txt"],
-                    results: [],
-                },
-            ];
+            const validRuleTable = [mockRuleOne, mockRuleTwo];
 
             const result = isValidRuleTable(validRuleTable);
             expect(result).toBe(true);
@@ -93,17 +43,7 @@ describe("PropTypes Validation", () => {
                     index: 1,
                     title: "Rule 1",
                 },
-                {
-                    index: "2",
-                    title: "Rule 2",
-                    description: "Description for rule 2",
-                    tags: ["tag3"],
-                    rulePatternQuantifier: {},
-                    rulePatternConstraint: {},
-                    language: "",
-                    filesAndFolders: ["file.txt", "folder1"],
-                    results: [],
-                },
+                mockRuleOne,
             ];
 
             const result = isValidRuleTable(invalidRuleTable);
@@ -111,17 +51,7 @@ describe("PropTypes Validation", () => {
         });
 
         it("should return false for a non-array input", () => {
-            const invalidRuleTable = {
-                index: "1",
-                title: "Rule 1",
-                description: "Description for rule 1",
-                tags: ["tag1", "tag2"],
-                rulePatternQuantifier: {},
-                rulePatternConstraint: {},
-                language: "",
-                filesAndFolders: ["file.txt", "folder1"],
-                results: [],
-            };
+            const invalidRuleTable = mockRuleOne;
 
             const result = isValidRuleTable(invalidRuleTable);
             expect(result).toBe(false);
@@ -140,51 +70,40 @@ describe("PropTypes Validation", () => {
         });
 
         it("should return only valid rules from the input", () => {
+            const invalidRuleTwo = {...mockRuleTwo};
+            delete invalidRuleTwo.title; // Title is missing
+            const invalidRuleThree = {...mockRuleThree};
+            invalidRuleThree.index = 5; // Title is missing
             const input = [
-                {index: "1", title: "Rule 1", description: "First rule", tags: ["tag1"], rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []},
-                {index: "2", title: "Rule 2", description: "Second rule", tags: ["tag2", "tag3"], rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []},
-                {index: "3", title: "Rule 3", description: "Third rule", tags: "not an array", rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []}, // Invalid rule
-                {index: "4", title: "Rule 4", tags: [], rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []}, // Invalid rule
+                mockRuleOne,
+                invalidRuleTwo,
+                invalidRuleThree,
+                mockRuleFour,
             ];
             const result = validRules(input);
-            expect(result).toEqual([
-                {index: "1", title: "Rule 1", description: "First rule", tags: ["tag1"], rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []},
-                {index: "2", title: "Rule 2", description: "Second rule", tags: ["tag2", "tag3"], rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []},
-            ]);
+            expect(result).toEqual([mockRuleOne, mockRuleFour]);
         });
 
         it("should return an empty array if no valid rules are found", () => {
-            const input = [
-                {index: "1", title: "Invalid Rule", description: "No tags", tags: "not an array", rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []},
-                {index: "2", title: "Invalid Rule 2", tags: null}, // Invalid rule
-            ];
+            const invalidRuleOne = {...mockRuleOne};
+            invalidRuleOne.tags = "not an array";
+            const invalidRuleTwo = {...mockRuleTwo};
+            invalidRuleTwo.tags = null;
+            const input = [invalidRuleOne, invalidRuleTwo];
             const result = validRules(input);
             expect(result).toEqual([]);
         });
 
         it("should handle deeply nested structures and return only valid rules", () => {
+            const invalidRuleTwo = {...mockRuleTwo};
+            invalidRuleTwo.description = {extra: "info"};
             const input = [
-                {index: "1", title: "Nested Valid Rule", description: "Valid rule", tags: ["tag1"], rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []},
-                {index: "2", title: "Invalid Nested Rule", details: {extra: "info"}, rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []}, // Invalid rule
-                {index: "3", title: "Another Valid Rule", description: "Another valid rule", tags: ["tag2"], rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []},
+                mockRuleOne,
+                invalidRuleTwo,
+                mockRuleThree,
             ];
             const result = validRules(input);
-            expect(result).toEqual([
-                {index: "1", title: "Nested Valid Rule", description: "Valid rule", tags: ["tag1"], rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []},
-                {index: "3", title: "Another Valid Rule", description: "Another valid rule", tags: ["tag2"], rulePatternQuantifier: {},
-                    rulePatternConstraint: {}, language: "", filesAndFolders: ["file.txt", "folder1"], results: []},
-            ]);
+            expect(result).toEqual([mockRuleOne, mockRuleThree]);
         });
     });
 });

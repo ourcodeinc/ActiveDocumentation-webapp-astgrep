@@ -3,32 +3,18 @@ import React from "react";
 import {render, screen, fireEvent, waitFor} from "@testing-library/react";
 import {countSnippets} from "../../core/ruleProcessor";
 import RulePanel from "./rulePanel";
+import {mockRuleSix} from "../../__mocks__/mockRules";
 
 // Mock SnippetView
 // eslint-disable-next-line react/display-name
-jest.mock("./snippetView", () => (props) =>
-    (<div data-testid="snippet-view">Snippet Data: {JSON.stringify(props.snippetData)}</div>));
+jest.mock("./snippetView", () => ({snippetData}) =>
+    (<div data-testid="snippet-view">Snippet Data: {snippetData.snippet}</div>));
 jest.mock("../../core/ruleProcessor", () => ({
     countSnippets: jest.fn(),
 }));
 
 describe("RulePanel Component", () => {
-    const mockRule = {
-        title: "Test Rule",
-        description: "This is a test rule description",
-        tags: ["tag1", "tag2"],
-        results: [
-            [
-                {
-                    relativeFilePath: "file1.js",
-                    snippets: {
-                        satisfiedSnippets: [{snippet: "satisfied snippet 1"}, {snippet: "satisfied snippet 2"}],
-                        violatedSnippets: [{snippet: "violated snippet 1"}],
-                    },
-                },
-            ],
-        ],
-    };
+    const mockRule = {...mockRuleSix};
 
     beforeEach(() => {
         // Reset mocks before each test
@@ -48,8 +34,8 @@ describe("RulePanel Component", () => {
     it("renders tags correctly", () => {
         render(<RulePanel ruleI={mockRule} />);
 
-        expect(screen.getByText("tag1")).toBeInTheDocument();
-        expect(screen.getByText("tag2")).toBeInTheDocument();
+        expect(screen.getByText("Tag1")).toBeInTheDocument();
+        expect(screen.getByText("Tag2")).toBeInTheDocument();
     });
 
     it("renders satisfied snippet tab", () => {
@@ -60,8 +46,8 @@ describe("RulePanel Component", () => {
 
         fireEvent.click(examplesTabHeader);
 
-        expect(screen.getByText("Snippet Data: {\"snippet\":\"satisfied snippet 1\"}")).toBeInTheDocument();
-        expect(screen.getByText("Snippet Data: {\"snippet\":\"satisfied snippet 2\"}")).toBeInTheDocument();
+        expect(screen.getByText("Snippet Data: satisfied snippet 1")).toBeInTheDocument();
+        expect(screen.getByText("Snippet Data: satisfied snippet 2")).toBeInTheDocument();
     });
 
     it("renders violated snippet tab", () => {
@@ -72,7 +58,7 @@ describe("RulePanel Component", () => {
 
         fireEvent.click(violatedTabHeader);
 
-        expect(screen.getByText("Snippet Data: {\"snippet\":\"violated snippet 1\"}")).toBeInTheDocument();
+        expect(screen.getByText("Snippet Data: violated snippet 1")).toBeInTheDocument();
     });
 
     it("collapses and expands panel correctly", async () => {
