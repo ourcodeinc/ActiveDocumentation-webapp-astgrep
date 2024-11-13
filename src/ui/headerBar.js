@@ -37,7 +37,7 @@ export class HeaderBar extends Component {
         this.setState({
             hash: hashes[0] ?? HASH_CONSTANTS.INDEX,
         });
-    }
+    };
 
     render() {
         return (
